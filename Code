@@ -1,0 +1,68 @@
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h> 
+#include "DHT.h" 
+
+#define DHTPIN 8		// Digital pin connected to the DHT sensor 
+#define DHTPIN2 9		// Digital pin connected to the DHT sensor 
+#define DHTTYPE DHT11 
+LiquidCrystal_I2C lcd(0x27, 16, 2);	// Interface address, 16 characters by 2 line display 
+
+DHT dht(DHTPIN, DHTTYPE);
+dht2(DHTPIN2, DHTTYPE); 
+
+void setup() 
+{ 
+	dht.begin(); 
+	dht2.begin(); 
+
+	// Initialize the LCD 
+	lcd.begin(); 
+
+	// Turn on the blacklight (Blue) 
+	lcd.backlight(); 
+} 
+
+void loop() 
+{ 
+	
+	// Reading temperature or humidity takes about 250 milliseconds! 
+	// Sensor readings may also be up to 2 seconds 'old' (it is a very slow sensor) 
+
+	//Sensor 1 
+	float h = dht.readHumidity(); 
+	// Read temperature as Celsius (the default) 
+	float t = dht.readTemperature(); 
+	
+	//Sensor 2 
+	float h2 = dht2.readHumidity(); 
+	// Read temperature as Celsius (the default) 
+	float t2 = dht2.readTemperature(); 
+
+	lcd.clear(); 
+	lcd.print("LPU Current"); 
+	lcd.setCursor(0,1); 
+	lcd.print(t); 
+	lcd.setCursor(5, 1); 
+	lcd.print(((char)223)); 	//(char)223 displays degree symbol 
+	lcd.print("C"); 
+	lcd.setCursor(8, 1); 
+	lcd.print("H="); 
+	lcd.print(h); 
+	lcd.setCursor(15, 1); 
+	lcd.print("%"); 
+	delay(2000); 
+	lcd.clear(); 
+	lcd.print("LPU C/W Breeze");
+	lcd.setCursor(0,1); 
+	lcd.print(t2); 
+	lcd.setCursor(5, 1); 
+	lcd.print(((char)223)); 	//(char)223 displays degree symbol 
+	lcd.print("C"); 
+	lcd.setCursor(8, 1); 
+	lcd.print("H="); 
+	lcd.print(h2); 
+	lcd.setCursor(15, 1); 
+	lcd.print("%"); 
+	delay(2000); 
+
+}
